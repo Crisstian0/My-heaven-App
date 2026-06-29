@@ -35,7 +35,7 @@ def iniciar_modelo():
     )
 
 model = iniciar_modelo()
-
+model_name="gemini-1.5-flash",
 # Inicializar el historial de conversación en la memoria de la página
 if "chat_session" not in st.session_state:
     st.session_state.chat_session = model.start_chat(history=[])
