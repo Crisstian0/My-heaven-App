@@ -29,7 +29,7 @@ PROMPT_SISTEMA = (
 @st.cache_resource
 def iniciar_modelo():
     return genai.GenerativeModel(
-        model_name="gemini-1.5-pro",
+        model_name="gemini-2.5-flash",
         system_instruction=PROMPT_SISTEMA
     )
 
