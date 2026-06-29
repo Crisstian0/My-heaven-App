@@ -1,4 +1,3 @@
-%%writefile app.py
 import urllib.request
 import json
 import re
