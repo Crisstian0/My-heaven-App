@@ -1,17 +1,41 @@
 import streamlit as st
 import google.generativeai as genai
 
-# Configuración estética de la app
-st.set_page_config(page_title="Heaven App", page_icon="🤖", layout="centered")
-st.title("🤖 Heaven App")
-st.subheader("Tu Asistente de Consejería y Reflexión")
-st.caption("Una IA real con memoria para conversar profundamente sobre tus dilemas y reflexiones.")
+# 🌟 CONFIGURACIÓN ESTÉTICA PREMIUM
+st.set_page_config(
+    page_title="Heaven App", 
+    page_icon="🕊️", 
+    layout="centered"
+)
+
+# Aplicar un toque de estilo con Markdown para centrar y embellecer el encabezado
+st.markdown("<h1 style='text-align: center; color: #4A90E2;'>🕊️ Heaven App</h1>", unsafe_allow_html=True)
+st.markdown("<h3 style='text-align: center; color: #7F8C8D;'>Tu Asistente de Consejería y Reflexión</h3>", unsafe_allow_html=True)
+st.markdown("---")
+
+# 📌 PANEL DE BIENVENIDA (Tarjetas de presentación)
+# Usamos columnas para que se vea ordenado y elegante
+col1, col2 = st.columns(2)
+
+with col1:
+    st.info(
+        "### 📖 Base Teológica\n"
+        "Respuestas guiadas **única y exclusivamente** bajo la traducción de la **Reina Valera 1960**."
+    )
+
+with col2:
+    st.success(
+        "### 🧠 Memoria Activa\n"
+        "Esta IA analiza tus dilemas a fondo y **recuerda todo el hilo** de nuestra conversación."
+    )
+
+st.write("") # Espacio en blanco estético
 
 # Conectar con el cerebro de Google usando tu API Key de forma segura
 if "GEMINI_KEY" in st.secrets:
     genai.configure(api_key=st.secrets["GEMINI_KEY"])
 else:
-    st.error("Por favor, configura tu GEMINI_KEY en los secretos de Streamlit.")
+    st.error("⚠️ Por favor, configura tu GEMINI_KEY en los secretos de Streamlit.")
     st.stop()
 
 # Instrucciones de personalidad para la IA (System Instructions)
@@ -41,20 +65,27 @@ model = iniciar_modelo()
 if "chat_session" not in st.session_state:
     st.session_state.chat_session = model.start_chat(history=[])
 
-# Mostrar los mensajes anteriores en la pantalla
+# 💬 CONTENEDOR DEL CHAT ESTILIZADO
+# Mostrar los mensajes anteriores en la pantalla con avatares personalizados
 for message in st.session_state.chat_session.history:
-    role = "assistant" if message.role == "model" else "user"
-    with st.chat_message(role):
+    if message.role == "model":
+        role = "assistant"
+        avatar = "🕊️"  # Icono para la IA
+    else:
+        role = "user"
+        avatar = "👤"  # Icono para el usuario
+        
+    with st.chat_message(role, avatar=avatar):
         st.markdown(message.parts[0].text)
 
 # Capturar la entrada del usuario
-if pregunta_usuario := st.chat_input("Escribe tu mensaje o problema aquí..."):
-    # Mostrar el mensaje del usuario en la pantalla
-    with st.chat_message("user"):
+if pregunta_usuario := st.chat_input("Escribe tu dilema o reflexión aquí..."):
+    # Mostrar el mensaje del usuario
+    with st.chat_message("user", avatar="👤"):
         st.markdown(pregunta_usuario)
     
-    # Enviar el mensaje al cerebro de Gemini y esperar la respuesta razonada
-    with st.chat_message("assistant"):
-        with st.spinner("Pensando profundamente..."):
+    # Enviar el mensaje al cerebro de Gemini con indicador de carga elegante
+    with st.chat_message("assistant", avatar="🕊️"):
+        with st.spinner("Reflexionando profundamente bajo la RVR1960..."):
             response = st.session_state.chat_session.send_message(pregunta_usuario)
             st.markdown(response.text)
