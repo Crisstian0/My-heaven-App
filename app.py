@@ -8,14 +8,13 @@ st.subheader("Tu Asistente de Consejería y Reflexión")
 st.caption("Una IA real con memoria para conversar profundamente sobre tus dilemas y reflexiones.")
 
 # Conectar con el cerebro de Google usando tu API Key de forma segura
-# (Configuraremos 'GEMINI_KEY' en los secretos de Streamlit en el siguiente paso)
 if "GEMINI_KEY" in st.secrets:
     genai.configure(api_key=st.secrets["GEMINI_KEY"])
 else:
     st.error("Por favor, configura tu GEMINI_KEY en los secretos de Streamlit.")
     st.stop()
 
-# Instrucciones de personalidad para la IA (System Instructions)
+# Instrucciones de personalidad para la IA
 PROMPT_SISTEMA = (
     "Eres un consejero espiritual, teológico y filosófico altamente empático, paciente y sabio. "
     "Tu objetivo es escuchar los problemas de los usuarios (como crisis de pareja, ansiedad o dudas) "
@@ -30,12 +29,12 @@ PROMPT_SISTEMA = (
 @st.cache_resource
 def iniciar_modelo():
     return genai.GenerativeModel(
-        model_name="gemini-1.5-flash",
+        model_name="gemini-1.5-pro",
         system_instruction=PROMPT_SISTEMA
     )
 
 model = iniciar_modelo()
-model_name="gemini-1.5-pro",
+
 # Inicializar el historial de conversación en la memoria de la página
 if "chat_session" not in st.session_state:
     st.session_state.chat_session = model.start_chat(history=[])
